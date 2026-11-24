@@ -1,6 +1,6 @@
 # EVE Pressure Overlay
 
-A Windows overlay for turret, missile and drone hit quality, capacitor warfare and incoming DPS. It reads the English combat logs EVE Online writes locally and draws with [Pillow](https://python-pillow.org/). Linking a character through ESI is optional and lets it hide while you're docked.
+A Windows overlay for turret, missile and drone hit quality, capacitor warfare and incoming DPS. It reads the English combat logs EVE Online writes locally and draws with [Pillow](https://python-pillow.org/). Linking a character through ESI is optional; it scales the warnings to your ship and hides the overlay while you're docked.
 
 ![The overlay showing every meter with sample data](docs/screenshot.png)
 
@@ -44,11 +44,15 @@ The neut meters use the actual GJ removed in each neutralizer event. Activity ag
 
 Position, character, drone, layout, ESI and lock settings are saved in `%LOCALAPPDATA%\EVE Pressure\settings.json`.
 
-## Hide while docked (ESI)
+## Link a character (optional ESI)
 
-The game logs don't record docking at citadels, so the overlay asks [ESI](https://developers.eveonline.com/), CCP's official API, whether the pilot is docked and which ship they're in. It's the only thing ESI is used for, besides ship type and group names, which are fetched once per ship. ESI updates every few seconds, so the overlay hides a moment after you dock. Docking and changing ships also reset the hit quality meters.
+Everything works without this. Linking a character lets the overlay ask [ESI](https://developers.eveonline.com/), CCP's official API, where that pilot is and which ship they're flying. It requests only those two permissions and uses them for three things:
 
-The overlay checks location and ship about every 5 seconds, only for the character it's following, and backs off when ESI asks it to. Hover the tray icon to see whether ESI is complaining.
+- **Warning colors that fit your ship.** The amber and red levels for incoming DPS and neut pressure scale with your ship class (see [Read the meters](#read-the-meters)). Without ESI every ship gets the cruiser levels, so a frigate is warned late and a battleship early.
+- **Hiding as soon as you dock.** The game logs don't record docking at citadels. Without ESI the overlay still goes blank in a station, but only once its rows time out, up to two minutes after your last shot.
+- **Fresh hit meters.** Docking or changing ships resets the hit quality meters, so the last ship's results don't show after you undock in another.
+
+ESI updates every few seconds, so the overlay reacts a moment after you dock or reship. It checks location and ship about every 5 seconds, only for the character it's following, fetches ship type and group names once per ship, and backs off when ESI asks it to. Hover the tray icon to see whether ESI is complaining.
 
 Open **Settings**, click **Link character…** and log in with EVE in the browser that opens. Repeat for each character. If linking fails, check that no other program is using port 8765.
 
