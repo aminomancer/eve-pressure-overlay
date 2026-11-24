@@ -1,13 +1,13 @@
 # EVE Pressure Overlay
 
-A Windows overlay for turret, missile and drone hit quality, capacitor warfare and incoming DPS. It reads the English combat logs EVE Online writes locally and draws with Pillow. Linking a character through ESI is optional and lets it hide while you're docked.
+A Windows overlay for turret, missile and drone hit quality, capacitor warfare and incoming DPS. It reads the English combat logs EVE Online writes locally and draws with [Pillow](https://python-pillow.org/). Linking a character through ESI is optional and lets it hide while you're docked.
 
 ![The overlay showing every meter with sample data](docs/screenshot.png)
 
 ## Run it
 
 1. Use EVE in **Windowed** or **Fixed Window** mode, with English combat logging enabled. If the hit quality stays blank while firing turrets or missiles, check that combat messages include the weapon and hit quality in **Log and Messages**.
-2. Download **EVE-Pressure.zip**, right-click it, choose **Properties** and tick **Unblock**, then extract it wherever you want to keep it. Double-click **EVE Pressure.cmd** to start the overlay. The first start adds **EVE Pressure** to the Start menu, so you can start it from there afterwards. You can also add a desktop shortcut in **Settings**. Everything the overlay needs is inside the folder, so nothing gets installed. To remove it, delete the folder and its Start menu entry. If you move the folder, start it once from **EVE Pressure.cmd** and the shortcuts follow.
+2. Download **[EVE-Pressure.zip](https://github.com/aminomancer/eve-pressure-overlay/releases/latest/download/EVE-Pressure.zip)** from the [latest release](https://github.com/aminomancer/eve-pressure-overlay/releases/latest), right-click it, choose **Properties** and tick **Unblock**, then extract it wherever you want to keep it. Double-click **EVE Pressure.cmd** to start the overlay. The first start adds **EVE Pressure** to the Start menu, so you can start it from there afterwards. You can also add a desktop shortcut in **Settings**. Everything the overlay needs is inside the folder, so nothing gets installed. To remove it, delete the folder and its Start menu entry. If you move the folder, start it once from **EVE Pressure.cmd** and the shortcuts follow.
 3. The overlay lives in the notification area and shows itself over the focused EVE window, so you can start it before EVE. It hides when you switch away, on the character select screen and, with ESI linked, while docked.
 4. Click or right-click the tray icon for **Move overlay**, **Settings…** and **Quit**. In Move mode the overlay gets a dark panel you can drag and shows every meter at once, so you can see its full size. Any meter without recent live data, the kind that would show while locked, shows made-up data instead, including one neut target in each drain state. Choose **Move overlay** again, or press **Ctrl+Alt+F10** (**Ctrl+Shift+F10** if that's taken), to lock it. A locked overlay passes clicks through to EVE except over the row icons, which show tooltips when you hover them. In Move mode a ⚙ button at the bottom opens **Settings**; right-click it for the tray menu, so you can lock the overlay or quit without leaving the game.
 5. In **Settings**, choose a character or a different log folder. The default is `Documents\EVE\logs\Gamelogs`, using your Windows Documents location. **Follow active EVE character** uses the pilot in the focused game window's title when available and falls back to the newest session otherwise. **Meters fill from the right** puts the icons on the right and fills bars leftward, for an overlay on the right side of the screen. Turn off **Dark backdrop in Move mode** to see the overlay in Move mode as it looks when locked; you can then drag it only by its drawn bars, text and icons.
@@ -40,13 +40,13 @@ The totals turn amber, then red, at levels that scale with your ship class, whic
 
 The log names the turret for incoming turret damage, such as `Mega Pulse Laser II`, and the missile for incoming missile damage, such as `Caldari Navy Scourge Heavy Missile`. It never names turret ammo, so the overlay can't tell a turret's damage type. The missile family doesn't settle range either: heavy missiles come from both cruiser launchers and battleship rapid heavy launchers.
 
-The neut meters use the actual GJ removed in each neutralizer event. Activity ages out even if the log is idle. [CCP's neutralizer logging notes](https://www.eveonline.com/news/view/patch-notes-version-21-02#modules)
+The neut meters use the actual GJ removed in each neutralizer event. Activity ages out even if the log is idle. See [CCP's neutralizer logging notes](https://www.eveonline.com/news/view/patch-notes-version-21-02#modules).
 
 Position, character, drone, layout, ESI and lock settings are saved in `%LOCALAPPDATA%\EVE Pressure\settings.json`.
 
 ## Hide while docked (ESI)
 
-The game logs don't record docking at citadels, so the overlay asks ESI, CCP's official API, whether the pilot is docked and which ship they're in. It's the only thing ESI is used for, besides ship type and group names, which are fetched once per ship. ESI updates every few seconds, so the overlay hides a moment after you dock. Docking and changing ships also reset the hit quality meters.
+The game logs don't record docking at citadels, so the overlay asks [ESI](https://developers.eveonline.com/), CCP's official API, whether the pilot is docked and which ship they're in. It's the only thing ESI is used for, besides ship type and group names, which are fetched once per ship. ESI updates every few seconds, so the overlay hides a moment after you dock. Docking and changing ships also reset the hit quality meters.
 
 The overlay checks location and ship about every 5 seconds, only for the character it's following, and backs off when ESI asks it to. Hover the tray icon to see whether ESI is complaining.
 
@@ -60,16 +60,16 @@ EVE Pressure was built with the help of an AI coding assistant (Anthropic's Clau
 
 ## Development
 
-Run from source with Python 3.11 or later, including Tcl/Tk. Install Pillow once with `python -m pip install pillow`, then double-click **Start Overlay.pyw** or run `python -m pressure_overlay`. The first start adds a Start menu shortcut pointing at your Python and this folder, the same as the zip does. Add `--preview` to show the overlay without a focused EVE window.
+Run from source with [Python](https://www.python.org/downloads/windows/) 3.11 or later, including Tcl/Tk. Install Pillow once with `python -m pip install pillow`, then double-click **[Start Overlay.pyw](Start%20Overlay.pyw)** or run `python -m pressure_overlay`. The first start adds a Start menu shortcut pointing at your Python and this folder, the same as the zip does. Add `--preview` to show the overlay without a focused EVE window.
 
-To watch a past fight again, run `python replay.py "Pilot Name"`. It finds your most recent combat with that pilot in your game logs, takes in everything fought alongside it (each combat line within a minute of the previous one), and replays it in real time on a loop through the overlay's simulation mode. Without a name it replays your most recent fight. Any part of a log line works as the name, such as a ship type. Add `--preview` to watch it without EVE focused, and quit from the tray icon.
+To watch a past fight again, run [`replay.py`](replay.py) as `python replay.py "Pilot Name"`. It finds your most recent combat with that pilot in your game logs, takes in everything fought alongside it (each combat line within a minute of the previous one), and replays it in real time on a loop through the overlay's simulation mode. Without a name it replays your most recent fight. Any part of a log line works as the name, such as a ship type. Add `--preview` to watch it without EVE focused, and quit from the tray icon.
 
-`python tools/screenshot.py` regenerates the screenshot at the top of this page from Move mode's sample data.
+[`python tools/screenshot.py`](tools/screenshot.py) regenerates the screenshot at the top of this page from Move mode's sample data.
 
-`python build.py` builds the portable zip into `dist`. It bundles Python's embeddable runtime for the Python version you build with, plus Tcl/Tk from your install, and Pillow.
+[`python build.py`](build.py) builds the portable zip into `dist`. It bundles Python's embeddable runtime for the Python version you build with, plus Tcl/Tk from your install, and Pillow.
 
 To use your own ESI app, register one at [developers.eveonline.com](https://developers.eveonline.com/). Give it the scopes `esi-location.read_location.v1` and `esi-location.read_ship_type.v1` and the callback URL `http://localhost:8765/callback`. Then set `esi_client_id` in `%LOCALAPPDATA%\EVE Pressure\settings.json`.
 
 Run the tests with `python -m unittest discover -s tests`.
-Run `ruff check .` for linting and `ruff format .` for formatting. Without a global install, use the `ruff.exe` bundled in the VS Code Ruff extension under `%USERPROFILE%\.vscode\extensions\charliermarsh.ruff-*\bundled\libs\bin`.
+Run [Ruff](https://docs.astral.sh/ruff/) with `ruff check .` for linting and `ruff format .` for formatting. Without a global install, use the `ruff.exe` bundled in the [VS Code Ruff extension](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) under `%USERPROFILE%\.vscode\extensions\charliermarsh.ruff-*\bundled\libs\bin`.
 
