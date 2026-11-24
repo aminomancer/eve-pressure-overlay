@@ -2,6 +2,8 @@
 
 A Windows overlay for turret, missile and drone hit quality, capacitor warfare and incoming DPS. It reads the English combat logs EVE Online writes locally and draws with Pillow. Linking a character through ESI is optional and lets it hide while you're docked.
 
+![The overlay showing every meter with sample data](docs/screenshot.png)
+
 ## Run it
 
 1. Use EVE in **Windowed** or **Fixed Window** mode, with English combat logging enabled. If the hit quality stays blank while firing turrets or missiles, check that combat messages include the weapon and hit quality in **Log and Messages**.
@@ -61,6 +63,8 @@ EVE Pressure was built with the help of an AI coding assistant (Anthropic's Clau
 Run from source with Python 3.11 or later, including Tcl/Tk. Install Pillow once with `python -m pip install pillow`, then double-click **Start Overlay.pyw** or run `python -m pressure_overlay`. The first start adds a Start menu shortcut pointing at your Python and this folder, the same as the zip does. Add `--preview` to show the overlay without a focused EVE window.
 
 To watch a past fight again, run `python replay.py "Pilot Name"`. It finds your most recent combat with that pilot in your game logs, takes in everything fought alongside it (each combat line within a minute of the previous one), and replays it in real time on a loop through the overlay's simulation mode. Without a name it replays your most recent fight. Any part of a log line works as the name, such as a ship type. Add `--preview` to watch it without EVE focused, and quit from the tray icon.
+
+`python tools/screenshot.py` regenerates the screenshot at the top of this page from Move mode's sample data.
 
 `python build.py` builds the portable zip into `dist`. It bundles Python's embeddable runtime for the Python version you build with, plus Tcl/Tk from your install, and Pillow.
 
